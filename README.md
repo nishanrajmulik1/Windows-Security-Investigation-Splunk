@@ -18,10 +18,10 @@ This project simulates real-world attacks on a Windows machine and uses **Splunk
 | 🐉 Attacker  | Kali Linux           | Used to simulate attacks          |
 
 ---
-[LabSetup](./screenshots/Lab%20%Setup.png)
-[WIN-IP](./screenshots/Widows-IP.png)
-[KALI-IP](./screenshots/KALI-IP.png)
-[SIEM-IP](./screenshots/SIEM-IP.png)
+![LabSetup](./screenshots/Lab%20Setup.png)
+![WIN-IP](./screenshots/Windows-IP.png)
+![KALI-IP](./screenshots/KALI-IP.png)
+![SIEM-IP](./screenshots/SIEM-IP.png)
 
 
 ## 🔐 Task 1: Investigating RDP Brute-Force Attacks
@@ -33,24 +33,24 @@ Detect repeated login failures and successful RDP attempts to identify brute-for
 ```bash
 hydra -l administrator -P /path/to/passwords.txt rdp://<windows-ip>
 ```
-[RDP](./screenshots/AttackRDP%20%Windows.png)
+![RDP](./screenshots/AttackRDPWindows.png)
 
 ### 🔍 Splunk Query
 ```bash
 index=sysmon_logs sourcetype=XmlWinEventLog:Sysmon
 ```
-[RDPDetected](./screenshots/sysmonsplunkdashboard.png)
-[EventDetail](./screenshots/sysmoneventdetails.png)
-[ATTACKIP](./screenshots/AttackerIP.png)
-[VERIFYIP](./screenshots/AttackVM-IP.png)
+![RDPDetected](./screenshots/sysmonsplunkdashboard.png)
+![EventDetail](./screenshots/sysmoneventdetails.png)
+![ATTACKIP](./screenshots/AttackerIP.png)
+![VERIFYIP](./screenshots/AttackVM-IP.png)
 
 ### 🛠️ Incident Response
 ```bash
 # Block attacker IP
 New-NetFirewallRule -DisplayName "Block RDP Brute Force" -Direction Inbound -Action Block -RemoteAddress <attacker-ip>
 ```
-[BlockIP](./screenshots/BlockRDPAttackIP.png)
-[BlockRDP](./screenshots/BlockedVerification.png)
+![BlockIP](./screenshots/BlockRDPAttackIP.png)
+![BlockRDP](./screenshots/BlockedVerification.png)
 
 # Reset compromised account
 ```bash
@@ -71,14 +71,14 @@ Detect malicious or unauthorized PowerShell commands such as file downloads or e
 ```bash
 Invoke-WebRequest -Uri "https://secure.eicar.org/eicar.com.txt" -OutFile "$env:USERPROFILE\Downloads\eicar.com.txt"
 ```
-[SimulateMalwareTestFile](./screenshots/SimulateMalwareFile.png)
+![SimulateMalwareTestFile](./screenshots/SimulateMalwareFile.png)
 
 ## 🔍 Splunk Query
 ```bash
 index=sysmon_logs sourcetype=XmlWinEventLog:Sysmon "*eicar*"
 ```
-[malwaredetected](./screenshots/malwaredetected.png)
-[malwaredetails](./screenshots/malwaredetecteddetails.png)
+![malwaredetected](./screenshots/malwaredetected.png)
+![malwaredetails](./screenshots/malwaredetecteddetails.png)
 
 ### 🛠️ Incident Response
 ```bash
@@ -86,7 +86,7 @@ Stop-Process -Name powershell -Force
 
 New-NetFirewallRule -DisplayName "Block Malicious IP" -Direction Outbound -Action Block -RemoteAddress <malicious-ip>
 ```
-[BlockedSuspiciousIP](./screenshots/Verifyinfirewall.png)
+![BlockedSuspiciousIP](./screenshots/Verifyinfirewall.png)
 
 ## 📢 Alert Setup
 ```bash
@@ -103,7 +103,7 @@ Detect unauthorized registry changes that could be used for persistence or confi
 ```bash
 New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "MalwareTest" -Value "C:\malwaretest.exe"
 ```
-[SimulateMalwareTest](./screenshots/Suspiciousregistry.png)
+![SimulateMalwareTest](./screenshots/Suspiciousregistry.png)
 
 # Modify TCP settings
 ```
@@ -114,15 +114,15 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
 Remove-Item -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run\MalwareSimulation"
 ```
 ### Malware Detected
-[SuspiciousRegistry](./screenshots/Malwaredetected.png)
-[EventDetail](./screenshots/Malwareeventdetails.png)
+![SuspiciousRegistry](./screenshots/Malwaredetected.png)
+![EventDetail](./screenshots/Malwareeventdetails.png)
 
 ### 🛠️ Incident Response
 # Isolate system
 ```
 New-NetFirewallRule -DisplayName "Block All Traffic" -Direction Outbound -Action Block
 ```
-[BlockTraffic](./screenshots/BlockedSuspicioustraffic.png)
+![BlockTraffic](./screenshots/BlockedSuspicioustraffic.png)
 
 # Remove persistence
 ```
